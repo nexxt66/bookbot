@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookBot - Top Book Recommendations</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border-bottom: 1px solid #1e293b;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .category {
+      margin-bottom: 3rem;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #1e293b;
+    }
+
+    .category-icon {
+      font-size: 1.5rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .cat-it .category-icon { background: rgba(56, 189, 248, 0.15); }
+    .cat-business .category-icon { background: rgba(52, 211, 153, 0.15); }
+    .cat-career .category-icon { background: rgba(192, 132, 252, 0.15); }
+
+    .category-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .cat-it .category-header h2 { color: #38bdf8; }
+    .cat-business .category-header h2 { color: #34d399; }
+    .cat-career .category-header h2 { color: #c084fc; }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .book-card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid #334155;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .book-rank {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .cat-it .book-rank { color: #38bdf8; }
+    .cat-business .book-rank { color: #34d399; }
+    .cat-career .book-rank { color: #c084fc; }
+
+    .book-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 0.25rem;
+    }
+
+    .book-author {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .book-description {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .score-section {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .score-header {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin-bottom: 0.75rem;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .score-row:last-child { margin-bottom: 0; }
+
+    .score-source {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .score-value {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .score-bar-container {
+      flex-grow: 1;
+      height: 6px;
+      background: #334155;
+      border-radius: 3px;
+      margin: 0 0.75rem;
+      overflow: hidden;
+    }
+
+    .score-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+
+    .cat-it .score-bar { background: #38bdf8; }
+    .cat-business .score-bar { background: #34d399; }
+    .cat-career .score-bar { background: #c084fc; }
+
+    .composite-score {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+      border-top: 1px solid #334155;
+    }
+
+    .composite-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .composite-value {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-left: auto;
+    }
+
+    .cat-it .composite-value { color: #38bdf8; }
+    .cat-business .composite-value { color: #34d399; }
+    .cat-career .composite-value { color: #c084fc; }
+
+    .references {
+      border-top: 1px solid #334155;
+      padding-top: 1rem;
+    }
+
+    .references-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin-bottom: 0.5rem;
+    }
+
+    .ref-link {
+      display: block;
+      font-size: 0.8rem;
+      color: #64748b;
+      text-decoration: none;
+      padding: 0.2rem 0;
+      transition: color 0.15s;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ref-link:hover { color: #e2e8f0; }
+
+    .ref-link::before {
+      content: "\2192 ";
+      opacity: 0.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid #1e293b;
+      color: #475569;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: #64748b;
+      text-decoration: none;
+    }
+
+    footer a:hover { color: #94a3b8; }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.75rem; }
+      .books-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>BookBot</h1>
+  <p>Top 3 book recommendations in IT, Business, and Career in IT (Business Track) &mdash; scored from reputable sources.</p>
+</header>
+
+<div class="container">
+
+  <!-- IT Category -->
+  <section class="category cat-it">
+    <div class="category-header">
+      <div class="category-icon">&#128187;</div>
+      <h2>IT &amp; Technology</h2>
+    </div>
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-rank">#1 Pick</div>
+        <div class="book-title">Clean Code</div>
+        <div class="book-author">by Robert C. Martin</div>
+        <div class="book-description">A handbook of agile software craftsmanship. Presents a revolutionary paradigm for writing readable, maintainable code through principles, patterns, and practices that every developer should know.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:87.2%"></div></div>
+            <span class="score-value">4.36 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:89%"></div></div>
+            <span class="score-value">4.45 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.41 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/3735293-clean-code" target="_blank">Goodreads &mdash; Clean Code (23,300+ ratings)</a>
+          <a class="ref-link" href="https://www.shortform.com/best-books/genre/best-it-books-of-all-time" target="_blank">Shortform &mdash; 100 Best IT Books of All Time</a>
+          <a class="ref-link" href="https://mentorcruise.com/books/tech/" target="_blank">MentorCruise &mdash; Top Tech Books 2025</a>
+          <a class="ref-link" href="https://www.cyberinfoblog.com/blog/10-must-read-it-books-in-2025" target="_blank">CyberInfoBlog &mdash; 10 Must-Read IT Books 2025</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-rank">#2 Pick</div>
+        <div class="book-title">The Phoenix Project</div>
+        <div class="book-author">by Gene Kim, Kevin Behr &amp; George Spafford</div>
+        <div class="book-description">A novel about IT, DevOps, and helping your business win. Follows Bill Palmer navigating a critical IT project that is over budget and behind schedule, revealing the transformative power of DevOps.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:85.2%"></div></div>
+            <span class="score-value">4.26 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:87%"></div></div>
+            <span class="score-value">4.35 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.31 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/17255186-the-phoenix-project" target="_blank">Goodreads &mdash; The Phoenix Project (50,100+ ratings)</a>
+          <a class="ref-link" href="https://www.hellersearch.com/blog/hellers-recommended-reading-for-tech-leaders" target="_blank">Heller Search &mdash; 2025 Recommended Reading for Tech Leaders</a>
+          <a class="ref-link" href="https://www.blinkist.com/en/content/topics/tech-en" target="_blank">Blinkist &mdash; The Best 27 Tech Books</a>
+          <a class="ref-link" href="https://waydev.co/engineering-management-books/" target="_blank">Waydev &mdash; Best Books for Leaders in Tech 2026</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-rank">#3 Pick</div>
+        <div class="book-title">Code: The Hidden Language</div>
+        <div class="book-author">by Charles Petzold</div>
+        <div class="book-description">A fascinating journey into the heart of computing. Starting from simple concepts like Morse code and Braille, it gradually builds up to binary systems, logic gates, and full computer architecture.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:88.8%"></div></div>
+            <span class="score-value">4.44 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:90%"></div></div>
+            <span class="score-value">4.50 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.47 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/51125512-code" target="_blank">Goodreads &mdash; Code (10,500+ ratings)</a>
+          <a class="ref-link" href="https://travis.media/blog/8-must-read-tech-books/" target="_blank">Travis Media &mdash; 8 Must-Read Tech Books for 2026</a>
+          <a class="ref-link" href="https://www.goodbooks.io/categories/technology" target="_blank">Good Books &mdash; Best Technology Books (Updated 2025)</a>
+          <a class="ref-link" href="https://fivebooks.com/category/technology/" target="_blank">Five Books &mdash; The Best Books on Technology</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Business Category -->
+  <section class="category cat-business">
+    <div class="category-header">
+      <div class="category-icon">&#128188;</div>
+      <h2>Business</h2>
+    </div>
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-rank">#1 Pick</div>
+        <div class="book-title">Zero to One</div>
+        <div class="book-author">by Peter Thiel with Blake Masters</div>
+        <div class="book-description">Notes on startups, or how to build the future. Thiel argues that creating something entirely new (going from 0 to 1) is far more valuable than incremental improvement, and shows how to find singular opportunities.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:83%"></div></div>
+            <span class="score-value">4.15 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:86%"></div></div>
+            <span class="score-value">4.30 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.23 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/18050143-zero-to-one" target="_blank">Goodreads &mdash; Zero to One (387,500+ ratings)</a>
+          <a class="ref-link" href="https://www.bloomberg.com/features/2025-best-books/" target="_blank">Bloomberg &mdash; Best Books 2025: Business Leaders' Must-Reads</a>
+          <a class="ref-link" href="https://store.hbr.org/top-40-business-books/" target="_blank">HBR Store &mdash; Top 40 Essential Business Books</a>
+          <a class="ref-link" href="https://www.goodreads.com/list/show/232084" target="_blank">Goodreads &mdash; Top Business Books for Entrepreneurs 2025</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-rank">#2 Pick</div>
+        <div class="book-title">Good to Great</div>
+        <div class="book-author">by Jim Collins</div>
+        <div class="book-description">Why some companies make the leap and others don't. Based on a rigorous 5-year research project, Collins identifies the key factors that allow good companies to become truly great, enduring enterprises.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:82.4%"></div></div>
+            <span class="score-value">4.12 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:86%"></div></div>
+            <span class="score-value">4.30 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.21 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/76865-good-to-great" target="_blank">Goodreads &mdash; Good to Great (283,100+ ratings)</a>
+          <a class="ref-link" href="https://store.hbr.org/top-40-business-books/" target="_blank">HBR Store &mdash; Top 40 Essential Business Books</a>
+          <a class="ref-link" href="https://www.barnesandnoble.com/blog/the-best-business-books-of-2025/" target="_blank">Barnes &amp; Noble &mdash; Best Business Books</a>
+          <a class="ref-link" href="https://www.inc.com/chris-morris/10-best-business-books-of-2025-founders-business-leaders/91278857" target="_blank">Inc. &mdash; 10 Best Business Books of 2025</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-rank">#3 Pick</div>
+        <div class="book-title">The Lean Startup</div>
+        <div class="book-author">by Eric Ries</div>
+        <div class="book-description">How today's entrepreneurs use continuous innovation to create radically successful businesses. Introduces the Build-Measure-Learn loop and a scientific approach to creating and managing startups.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:82.2%"></div></div>
+            <span class="score-value">4.11 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:85%"></div></div>
+            <span class="score-value">4.25 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.18 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/10127019-the-lean-startup" target="_blank">Goodreads &mdash; The Lean Startup (359,000+ ratings)</a>
+          <a class="ref-link" href="https://chiefexecutive.net/top-eight-business-books-of-2025/" target="_blank">Chief Executive &mdash; Top 8 Business Books of 2025</a>
+          <a class="ref-link" href="https://fivebooks.com/best-books/best-business-books-2025-andrew-hill/" target="_blank">Five Books &mdash; Best Business Books of 2025</a>
+          <a class="ref-link" href="https://www.goodreads.com/list/show/232084" target="_blank">Goodreads &mdash; Top Business Books for Entrepreneurs 2025</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Career in IT (Business Track) -->
+  <section class="category cat-career">
+    <div class="category-header">
+      <div class="category-icon">&#128640;</div>
+      <h2>Career in IT &mdash; Business Track</h2>
+    </div>
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-rank">#1 Pick</div>
+        <div class="book-title">The Manager's Path</div>
+        <div class="book-author">by Camille Fournier</div>
+        <div class="book-description">A guide for tech leaders navigating growth and change. Covers every stage from mentoring interns to managing multiple teams, with practical advice on delegation, managing up, and organizational politics.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:84.6%"></div></div>
+            <span class="score-value">4.23 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:87%"></div></div>
+            <span class="score-value">4.35 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.29 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/33369254-the-manager-s-path" target="_blank">Goodreads &mdash; The Manager's Path (7,800+ ratings)</a>
+          <a class="ref-link" href="https://www.cio.com/article/479905/essential-book-recommendations-by-and-for-it-leaders.html" target="_blank">CIO &mdash; 35 Essential Books for IT Leaders</a>
+          <a class="ref-link" href="https://thectoclub.com/career/tech-leadership-books/" target="_blank">The CTO Club &mdash; 17 Best Tech Leadership Books</a>
+          <a class="ref-link" href="https://ntietz.com/blog/great-management-and-leadership-books-for-the-technical-track/" target="_blank">nicole@web &mdash; Leadership Books for the Technical Track</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-rank">#2 Pick</div>
+        <div class="book-title">Staff Engineer</div>
+        <div class="book-author">by Will Larson</div>
+        <div class="book-description">Leadership beyond the management track. Explores what lies beyond "senior" in an engineer's career, covering staff, principal, and distinguished engineer roles with real stories and actionable frameworks.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:80.8%"></div></div>
+            <span class="score-value">4.04 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:84%"></div></div>
+            <span class="score-value">4.20 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.12 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/56481725-staff-engineer" target="_blank">Goodreads &mdash; Staff Engineer (2,800+ ratings)</a>
+          <a class="ref-link" href="https://digitaldefynd.com/IQ/top-books-for-ctos-and-technology-leaders/" target="_blank">DigitalDefynd &mdash; Top 30 Books for CTOs &amp; Tech Leaders</a>
+          <a class="ref-link" href="https://waydev.co/engineering-management-books/" target="_blank">Waydev &mdash; Best Books for Leaders in Tech 2026</a>
+          <a class="ref-link" href="https://staffeng.com/book/" target="_blank">StaffEng.com &mdash; Official Book Page</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-rank">#3 Pick</div>
+        <div class="book-title">The Hard Thing About Hard Things</div>
+        <div class="book-author">by Ben Horowitz</div>
+        <div class="book-description">Building a business when there are no easy answers. Frank discussions on maintaining culture during rapid growth, handling layoffs, and staying grounded as a leader &mdash; drawn from real high-pressure experiences.</div>
+        <div class="score-section">
+          <div class="score-header">Ratings</div>
+          <div class="score-row">
+            <span class="score-source">Goodreads</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:83.4%"></div></div>
+            <span class="score-value">4.17 / 5</span>
+          </div>
+          <div class="score-row">
+            <span class="score-source">Amazon</span>
+            <div class="score-bar-container"><div class="score-bar" style="width:86%"></div></div>
+            <span class="score-value">4.30 / 5</span>
+          </div>
+          <div class="composite-score">
+            <span class="composite-label">Composite Score</span>
+            <span class="composite-value">4.24 / 5</span>
+          </div>
+        </div>
+        <div class="references">
+          <div class="references-title">Sources</div>
+          <a class="ref-link" href="https://www.goodreads.com/book/show/18176747-the-hard-thing-about-hard-things" target="_blank">Goodreads &mdash; The Hard Thing About Hard Things (95,000+ ratings)</a>
+          <a class="ref-link" href="https://www.analyticsinsight.net/books/10-books-every-cto-and-tech-leader-should-read-in-2025" target="_blank">Analytics Insight &mdash; 10 Books Every CTO Should Read in 2025</a>
+          <a class="ref-link" href="https://www.mescomputing.com/news/business/10-best-business-strategy-books-for-midmarket-it-leaders-to-level-up-in-2025" target="_blank">MES Computing &mdash; 10 Best Business Strategy Books for IT Leaders</a>
+          <a class="ref-link" href="https://www.hellersearch.com/blog/hellers-recommended-reading-for-tech-leaders" target="_blank">Heller Search &mdash; 2025 Recommended Reading for Tech Leaders</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>BookBot &mdash; Data sourced from <a href="https://www.goodreads.com" target="_blank">Goodreads</a>, <a href="https://www.amazon.com" target="_blank">Amazon</a>, <a href="https://store.hbr.org" target="_blank">HBR</a>, <a href="https://fivebooks.com" target="_blank">Five Books</a>, and other reputable review sites. Ratings as of early 2025.</p>
+</footer>
+
+</body>
+</html>

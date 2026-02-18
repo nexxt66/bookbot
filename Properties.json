@@ -1,11 +1,16 @@
 {
-  "Author": "BookBot User",
-  "Id": "00000000-0000-0000-0000-000000000001",
-  "Name": "BookRecommender",
-  "Description": "A simple canvas app that recommends books based on genre.",
-  "Tags": {
-    "primary": "canvas",
-    "version": "1.0"
+  "documentVersion": {
+    "major": 0,
+    "minor": 24
   },
-  "AllowedOutboundDomains": []
+  "id": "00000000-0000-0000-0000-000000000001",
+  "name": "BookRecommender",
+  "description": "A simple canvas app that recommends books based on genre.",
+  "apprevision": 1,
+  "author": {
+    "name": "BookBot User"
+  },
+  "publisherName": "BookBot User",
+  "allowedOutboundDomains": [],
+  "attribution": []
 }

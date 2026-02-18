@@ -1,24 +1,35 @@
 {
-  "CanvasManifestVersion": "2.0",
+  "FormatVersion": "0.24",
   "Properties": {
+    "Author": "BookBot User",
     "Name": "BookRecommender",
     "Id": "00000000-0000-0000-0000-000000000001",
+    "FileID": "00000000-0000-0000-0000-000000000002",
     "LocalConnectionReferences": "{}",
     "LocalDatabaseReferences": "{}",
     "LibraryDependencies": "{}",
     "DocumentLayoutWidth": 640,
     "DocumentLayoutHeight": 1136,
     "DocumentLayoutOrientation": "portrait",
-    "PublishVersion": "1.0",
-    "ScreenWidth": 640,
-    "ScreenHeight": 1136
+    "DocumentLayoutScaleToFit": true,
+    "DocumentLayoutMaintainAspectRatio": true,
+    "DocumentLayoutLockOrientation": false,
+    "DocumentAppType": "DesktopOrTablet",
+    "AppCreationSource": "AppFromScratch"
   },
-  "Screens": {
-    "HomeScreen": {
-      "Order": 0
-    },
-    "RecommendationsScreen": {
-      "Order": 1
-    }
-  }
+  "Header": {
+    "DocVersion": "1.395",
+    "MinVersionToLoad": "1.215",
+    "MSAppStructureVersion": "1.0",
+    "LastSavedDateTimeUTC": "2026-02-18T00:00:00.000Z"
+  },
+  "PublishInfo": {
+    "Description": "",
+    "AppDescription": "",
+    "LogoFileName": ""
+  },
+  "ScreenOrder": [
+    "HomeScreen",
+    "RecommendationsScreen"
+  ]
 }

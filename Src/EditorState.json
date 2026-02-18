@@ -1,0 +1,10 @@
+{
+  "Screens": {
+    "HomeScreen": {
+      "IsSelected": false
+    },
+    "RecommendationsScreen": {
+      "IsSelected": false
+    }
+  }
+}

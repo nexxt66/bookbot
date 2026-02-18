@@ -1,0 +1,16 @@
+{
+  "CanvasManifestVersion": "2.0",
+  "Properties": {
+    "Name": "BookRecommender",
+    "Id": "00000000-0000-0000-0000-000000000001",
+    "LocalConnectionReferences": {},
+    "LocalDatabaseReferences": {},
+    "LibraryDependencies": {},
+    "DocumentLayoutWidth": 640,
+    "DocumentLayoutHeight": 1136,
+    "DocumentLayoutOrientation": "portrait",
+    "PublishVersion": "1.0",
+    "ScreenWidth": 640,
+    "ScreenHeight": 1136
+  }
+}

@@ -10,12 +10,17 @@
     "RecommendBtn":           { "IsLocked": false },
     "FooterLabel":            { "IsLocked": false },
     "RecommendationsScreen":  { "IsLocked": false, "IsSelected": false },
-    "BooksGallery":           { "IsLocked": false },
-    "CardRect":               { "IsLocked": false },
+    "RecHeaderRect":          { "IsLocked": false },
     "BackButton":             { "IsLocked": false },
     "ScreenTitleLabel":       { "IsLocked": false },
     "GenreBadge":             { "IsLocked": false },
     "SeparatorRect":          { "IsLocked": false },
-    "NoResultsLabel":         { "IsLocked": false }
+    "BooksGallery":           { "IsLocked": false },
+    "CardRect":               { "IsLocked": false },
+    "BookTitleLabel":         { "IsLocked": false },
+    "AuthorLabel":            { "IsLocked": false },
+    "DescriptionLabel":       { "IsLocked": false },
+    "NoResultsLabel":         { "IsLocked": false },
+    "RecFooterLabel":         { "IsLocked": false }
   }
 }

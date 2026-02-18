@@ -1,7 +1,7 @@
 RecommendationsScreen As screen:
     Fill: =RGBA(245, 245, 250, 1)
 
-    HeaderRect As rectangle:
+    RecHeaderRect As rectangle:
         X: =0
         Y: =0
         Width: =Parent.Width
@@ -67,7 +67,7 @@ RecommendationsScreen As screen:
             BorderThickness: =1
             BorderRadius: =10
 
-        TitleLabel As label:
+        BookTitleLabel As label:
             X: =24
             Y: =12
             Width: =Parent.TemplateWidth - 44
@@ -108,7 +108,7 @@ RecommendationsScreen As screen:
         Color: =RGBA(160, 160, 180, 1)
         Visible: =CountRows(FilteredBooks) = 0
 
-    FooterLabel As label:
+    RecFooterLabel As label:
         X: =0
         Y: =Parent.Height - 50
         Width: =Parent.Width

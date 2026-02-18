@@ -48,7 +48,7 @@ RecommendationsScreen As screen:
         Height: =2
         Fill: =RGBA(200, 200, 220, 1)
 
-    BooksGallery As gallery:
+    BooksGallery As gallery.blank:
         X: =0
         Y: =165
         Width: =Parent.Width

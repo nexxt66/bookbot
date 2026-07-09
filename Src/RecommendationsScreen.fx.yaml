@@ -1,0 +1,119 @@
+RecommendationsScreen As screen:
+    Fill: =RGBA(245, 245, 250, 1)
+
+    RecHeaderRect As rectangle:
+        X: =0
+        Y: =0
+        Width: =Parent.Width
+        Height: =110
+        Fill: =RGBA(63, 81, 181, 1)
+
+    BackButton As button:
+        X: =10
+        Y: =40
+        Width: =80
+        Height: =40
+        Text: ="← Back"
+        Fill: =RGBA(0, 0, 0, 0)
+        Color: =RGBA(255, 255, 255, 1)
+        Size: =14
+        BorderThickness: =0
+        OnSelect: =Navigate(HomeScreen, ScreenTransition.Fade)
+
+    ScreenTitleLabel As label:
+        X: =90
+        Y: =35
+        Width: =Parent.Width - 100
+        Height: =50
+        Text: ="Recommendations"
+        Size: =20
+        FontWeight: =FontWeight.Bold
+        Color: =RGBA(255, 255, 255, 1)
+
+    GenreBadge As label:
+        X: =20
+        Y: =120
+        Width: =Parent.Width - 40
+        Height: =36
+        Text: ="Genre: " & GenreDropdown.SelectedText
+        Align: =Align.Left
+        Size: =14
+        FontWeight: =FontWeight.Semibold
+        Color: =RGBA(63, 81, 181, 1)
+
+    SeparatorRect As rectangle:
+        X: =20
+        Y: =158
+        Width: =Parent.Width - 40
+        Height: =2
+        Fill: =RGBA(200, 200, 220, 1)
+
+    BooksGallery As gallery.blank:
+        X: =0
+        Y: =165
+        Width: =Parent.Width
+        Height: =Parent.Height - 220
+        Items: =FilteredBooks
+        TemplatePadding: =12
+        TemplateSize: =130
+
+        CardRect As rectangle:
+            X: =10
+            Y: =0
+            Width: =Parent.TemplateWidth - 20
+            Height: =120
+            Fill: =RGBA(255, 255, 255, 1)
+            BorderColor: =RGBA(220, 220, 235, 1)
+            BorderThickness: =1
+            BorderRadius: =10
+
+        BookTitleLabel As label:
+            X: =24
+            Y: =12
+            Width: =Parent.TemplateWidth - 44
+            Height: =34
+            Text: =ThisItem.Title
+            Size: =15
+            FontWeight: =FontWeight.Bold
+            Color: =RGBA(30, 30, 60, 1)
+
+        AuthorLabel As label:
+            X: =24
+            Y: =46
+            Width: =Parent.TemplateWidth - 44
+            Height: =24
+            Text: ="by " & ThisItem.Author
+            Size: =13
+            Color: =RGBA(63, 81, 181, 1)
+            FontStyle: =FontStyle.Italic
+
+        DescriptionLabel As label:
+            X: =24
+            Y: =72
+            Width: =Parent.TemplateWidth - 44
+            Height: =40
+            Text: =ThisItem.Description
+            Size: =12
+            Color: =RGBA(100, 100, 130, 1)
+            Overflow: =Overflow.Hidden
+
+    NoResultsLabel As label:
+        X: =20
+        Y: =300
+        Width: =Parent.Width - 40
+        Height: =60
+        Text: ="No books found for this genre."
+        Align: =Align.Center
+        Size: =15
+        Color: =RGBA(160, 160, 180, 1)
+        Visible: =CountRows(FilteredBooks) = 0
+
+    RecFooterLabel As label:
+        X: =0
+        Y: =Parent.Height - 50
+        Width: =Parent.Width
+        Height: =40
+        Text: ="BookBot • Powered by Power Apps"
+        Align: =Align.Center
+        Size: =12
+        Color: =RGBA(160, 160, 180, 1)

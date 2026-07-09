@@ -1,0 +1,26 @@
+{
+  "Controls": {
+    "HomeScreen":             { "IsLocked": false, "IsSelected": false },
+    "HeaderRect":             { "IsLocked": false },
+    "AppIconLabel":           { "IsLocked": false },
+    "TitleLabel":             { "IsLocked": false },
+    "SubtitleLabel":          { "IsLocked": false },
+    "GenreLabel":             { "IsLocked": false },
+    "GenreDropdown":          { "IsLocked": false },
+    "RecommendBtn":           { "IsLocked": false },
+    "FooterLabel":            { "IsLocked": false },
+    "RecommendationsScreen":  { "IsLocked": false, "IsSelected": false },
+    "RecHeaderRect":          { "IsLocked": false },
+    "BackButton":             { "IsLocked": false },
+    "ScreenTitleLabel":       { "IsLocked": false },
+    "GenreBadge":             { "IsLocked": false },
+    "SeparatorRect":          { "IsLocked": false },
+    "BooksGallery":           { "IsLocked": false },
+    "CardRect":               { "IsLocked": false },
+    "BookTitleLabel":         { "IsLocked": false },
+    "AuthorLabel":            { "IsLocked": false },
+    "DescriptionLabel":       { "IsLocked": false },
+    "NoResultsLabel":         { "IsLocked": false },
+    "RecFooterLabel":         { "IsLocked": false }
+  }
+}

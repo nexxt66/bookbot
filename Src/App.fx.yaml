@@ -1,0 +1,21 @@
+App As appinfo:
+    BackEnabled: =false
+    OnStart: |
+        =ClearCollect(
+            BooksCollection,
+            {Genre: "Fiction",     Title: "To Kill a Mockingbird", Author: "Harper Lee",        Description: "A timeless story of racial injustice and moral growth in the American South."},
+            {Genre: "Fiction",     Title: "1984",                  Author: "George Orwell",       Description: "A chilling dystopian novel about totalitarianism and surveillance."},
+            {Genre: "Fiction",     Title: "The Great Gatsby",      Author: "F. Scott Fitzgerald", Description: "A portrait of the Jazz Age and the elusive American Dream."},
+            {Genre: "Mystery",     Title: "Gone Girl",             Author: "Gillian Flynn",       Description: "A dark, twisty psychological thriller about a marriage gone wrong."},
+            {Genre: "Mystery",     Title: "The Girl with the Dragon Tattoo", Author: "Stieg Larsson", Description: "A gripping mystery involving a decades-old family disappearance."},
+            {Genre: "Mystery",     Title: "Big Little Lies",       Author: "Liane Moriarty",      Description: "A murder mystery woven through the lives of three women."},
+            {Genre: "Sci-Fi",      Title: "Dune",                  Author: "Frank Herbert",       Description: "An epic saga of politics, religion, and ecology on a desert planet."},
+            {Genre: "Sci-Fi",      Title: "The Martian",           Author: "Andy Weir",           Description: "An astronaut stranded on Mars must use science to survive."},
+            {Genre: "Sci-Fi",      Title: "Ender's Game",          Author: "Orson Scott Card",    Description: "A gifted child is trained to lead humanity against an alien threat."},
+            {Genre: "Fantasy",     Title: "The Hobbit",            Author: "J.R.R. Tolkien",      Description: "A hobbit embarks on an unexpected journey with dwarves and a wizard."},
+            {Genre: "Fantasy",     Title: "Harry Potter and the Sorcerer's Stone", Author: "J.K. Rowling", Description: "A young boy discovers he is a wizard and enters a magical world."},
+            {Genre: "Fantasy",     Title: "The Name of the Wind",  Author: "Patrick Rothfuss",    Description: "The story of a legendary figure told in his own words."},
+            {Genre: "Biography",   Title: "Steve Jobs",            Author: "Walter Isaacson",     Description: "The definitive biography of Apple's visionary co-founder."},
+            {Genre: "Biography",   Title: "Educated",              Author: "Tara Westover",       Description: "A memoir about growing up in a survivalist family and self-reinvention."},
+            {Genre: "Biography",   Title: "Becoming",              Author: "Michelle Obama",      Description: "An intimate memoir by the former First Lady of the United States."}
+        )
